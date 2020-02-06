@@ -20,35 +20,17 @@ import java.io.IOException;
 public class GrabReport {
     public static void main(String[] args)
     {
-//        System.out.print("Input something: ");
-
-//        Scanner inp = new Scanner(System.in);
-//        String aLine = inp.nextLine();
-//        System.out.printf("%n%20s%n", aLine);
-//
-//        System.out.println("ura ho");
-//        String fReport = report();
-//        System.out.println(fReport);
-//        System.out.printf("%n%,20.4f%n", 12345.678);
-
-        //System.out.printf("here's your food sir %s", content);
-
         //query returns data from api, jsonparser then converts into a more useful format
         String content = query();
         String parsed = jsonParser(content);
     }
-    private static String report()
-    {
-        String response = "cake";
-        return response;
-    }
 
     private static String query() {
-
-        //Method 1 (inefficient)
+        //Method 1 (there were several good methods for getting json data, however this method was the most succesful
+        // the method was also the easiest to use and least prone to errors.
         BufferedReader reader; //reads everything from the website
         String line; //variable to temporarily hold each line
-        StringBuffer responseContent = new StringBuffer(); //appends each line to the response
+        StringBuffer responseContent = new StringBuffer(); //appends each line to the response, this is a non static string object
 
         HttpURLConnection connection = null;
         try {
@@ -64,6 +46,7 @@ public class GrabReport {
             int status = connection.getResponseCode();
             System.out.println(status);
 
+            //connection.getInputStream is the chunk that actually retrieves the data.
             boolean error = connection.getResponseCode() > 299;
             reader = new BufferedReader(new InputStreamReader( error ? connection.getErrorStream() : connection.getInputStream()));
             while ((line = reader.readLine()) != null)
@@ -78,28 +61,6 @@ public class GrabReport {
         } finally {
             connection.disconnect();
         }
-//        //Method 2
-//        HttpClient client = HttpClient.newHttpClient();
-//        HttpRequest request = HttpRequest.newBuilder()
-//                .uri(URI.create("https://world.openfoodfacts.org/api/v0/product/0737628064502.json"))
-//                .build();
-//        //a::b refers to a lambda expression (::)
-//        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-//                .thenApply(HttpResponse::body)
-//                .thenAccept(System.out::println)
-//                .join();
-//
-
-//        //Method 3
-//        HttpClient client = HttpClient.newHttpClient();
-//        HttpRequest request = HttpRequest.newBuilder()
-//                .uri(URI.create("https://world.openfoodfacts.org/api/v0/product/0737628064502.json"))
-//                .build();
-//
-//        String responseContent = client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-//                .thenApply(HttpResponse::body).toString();
-//
-//        return responseContent;
 
         return responseContent.toString();
     }
@@ -109,9 +70,10 @@ public class GrabReport {
         String allergens = "Unknown";
 
         JSONObject foodField = new JSONObject(responseContent);
-//        String productName = foodField.getString("product_name_en");
 
-        // due to descrepencies in standardised variable names, several known variables are tested
+        // due to a surprising lack of standardised variable names, several known variables are tested
+        // it is entirely possible that some edge case variables are not included, but the majority of products my user base
+        // will input will use these names.
         if (responseContent.contains("product_name")){productName = foodField.getJSONObject("product").getString("product_name"); }
         else if (responseContent.contains("product_name_en")){productName = foodField.getJSONObject("product").getString("product_name_en"); }
         else if (responseContent.contains("product_name_es")){productName = foodField.getJSONObject("product").getString("product_name_es"); }
@@ -120,12 +82,7 @@ public class GrabReport {
         if (responseContent.contains("allergens_from_ingredients")){allergens = foodField.getJSONObject("product").getString("allergens_from_ingredients");}
         System.out.printf("\n%20s\n",productName);
         System.out.printf("\n%28s\n",allergens);
-// for a list of objects (e.g. 5 different users with the same data types)
-//        for (int i = 0; i < albums.length(); i++){
-//            JSONObject foodFields = albums.getJSONObject(i);
-//            int productName = foodFields.getInt("product_name_en");
-//            int userId
-//        }
+
         return productName;
     }
 }
