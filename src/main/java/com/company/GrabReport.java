@@ -1,20 +1,12 @@
-package com;
+package com.company;
 
-import jdk.nashorn.internal.parser.JSONParser;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.Buffer;
-import java.util.Scanner;
 import java.io.IOException;
 
 public class GrabReport {
@@ -23,11 +15,12 @@ public class GrabReport {
         //query returns data from api, jsonparser then converts into a more useful format
         String content = query();
         String parsed = jsonParser(content);
+        System.out.println(parsed);
     }
 
     private static String query() {
-        //Method 1 (there were several good methods for getting json data, however this method was the most succesful
-        // the method was also the easiest to use and least prone to errors.
+        //Method 1 (there were several good methods for getting json data, however this method was the most successful
+        // this method was also the easiest to use and least prone to errors.
         BufferedReader reader; //reads everything from the website
         String line; //variable to temporarily hold each line
         StringBuffer responseContent = new StringBuffer(); //appends each line to the response, this is a non static string object
