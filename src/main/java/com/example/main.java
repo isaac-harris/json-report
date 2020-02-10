@@ -1,4 +1,4 @@
-package com.company;
+package com.example;
 
 import org.json.JSONObject;
 
@@ -9,7 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.IOException;
 
-public class GrabReport {
+public class main {
     public static void main(String[] args)
     {
         //query returns data from api, jsonparser then converts into a more useful format
