@@ -29,6 +29,3 @@ hs_err_pid*
 .idea/modules/
 build/generated/
 build/tmp/
-src/main/java/com/example/
-src/main/resources/
-src/test/
